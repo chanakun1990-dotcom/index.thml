@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;600;800&display=swap" rel="stylesheet">
+<title>ทะเบียนขอเปิดใช้ระบบปรับอากาศ</title>
+<style>
+:root{--bg:#cdd3c9;--bg2:#e6e9e1;--glass:rgba(255,255,255,.55);--glass-b:rgba(255,255,255,.75);--field:rgba(255,255,255,.75);--ink:#111;--mute:#5b625a;--line:rgba(17,17,17,.12);--acc:#ff6a33;--no:#c0392b;--sh:0 10px 30px rgba(40,50,40,.12);--r:22px}
+@media (prefers-color-scheme:dark){:root{--bg:#14181a;--bg2:#222a2d;--glass:rgba(255,255,255,.07);--glass-b:rgba(255,255,255,.14);--field:rgba(255,255,255,.08);--ink:#f1f3f2;--mute:#9aa6a3;--line:rgba(255,255,255,.12);--no:#ff7d6e;--sh:0 14px 40px rgba(0,0,0,.4)}}
+*{box-sizing:border-box}
+body{margin:0;color:var(--ink);font-family:"Prompt","Sarabun","Noto Sans Thai","Tahoma",sans-serif;font-size:15px;line-height:1.55;min-height:100vh;
+ background:radial-gradient(900px 500px at 85% -10%,var(--bg2),transparent 70%),radial-gradient(700px 500px at -10% 90%,color-mix(in srgb,var(--acc) 14%,transparent),transparent 70%),var(--bg);background-attachment:fixed}
+header{max-width:1200px;margin:18px auto 0;padding:0 16px}
+.hd{display:flex;align-items:center;gap:18px;background:#111;color:#fff;border-radius:var(--r);padding:18px 26px;box-shadow:var(--sh)}
+@media (prefers-color-scheme:dark){.hd{background:var(--glass-b);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid var(--line)}}
+.dot{flex:none;width:44px;height:44px;border-radius:50%;background:var(--acc)}
+header h1{margin:0;font-size:1.7rem;font-weight:800;letter-spacing:-.01em;line-height:1.15}
+header p{margin:2px 0 0;opacity:.7;font-size:.85rem;font-weight:400}
+main{max-width:1200px;margin:0 auto;padding:18px 16px 56px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;margin-bottom:18px}
+.stat,.tablewrap,.bar.panel{background:var(--glass);backdrop-filter:blur(18px) saturate(1.3);-webkit-backdrop-filter:blur(18px) saturate(1.3);border:1px solid var(--glass-b);border-radius:var(--r);box-shadow:var(--sh)}
+.stat{padding:16px 20px}
+.stat b{display:block;font-size:2.6rem;line-height:1.1;font-weight:800;letter-spacing:-.02em}
+.stat span{color:var(--mute);font-size:.85rem}
+.stat:first-child{background:var(--acc);border-color:transparent}
+.stat:first-child b,.stat:first-child span{color:#111}
+.bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:12px}
+.bar.panel{padding:12px 14px}
+input,select,textarea,button{font:inherit;color:inherit}
+input,select,textarea{background:var(--field);border:1px solid var(--line);border-radius:14px;padding:8px 14px;width:100%}
+.bar input,.bar select{width:auto;min-width:140px;border-radius:99px}
+.bar .grow{flex:1;min-width:200px}
+button{cursor:pointer;border:1px solid var(--line);background:var(--field);border-radius:99px;padding:8px 18px;transition:transform .12s,background .12s}
+button:hover{background:var(--glass-b)}
+button:active{transform:scale(.97)}
+button.primary{background:#111;border-color:#111;color:#fff;font-weight:600}
+button.primary:hover{background:var(--acc);border-color:var(--acc);color:#111}
+@media (prefers-color-scheme:dark){button.primary{background:var(--acc);border-color:var(--acc);color:#111}button.primary:hover{background:#fff;border-color:#fff}}
+button.danger{color:var(--no)}
+button.sm{padding:3px 12px;font-size:.82rem}
+:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+.tablewrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:900px}
+th,td{text-align:left;padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-weight:600;font-size:.82rem;color:var(--mute);white-space:nowrap;cursor:pointer;user-select:none}
+tbody tr:hover td{background:var(--glass)}
+tr:last-child td{border-bottom:0}
+td.num{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+.sub{display:block;color:var(--mute);font-size:.82rem}
+.tag{display:inline-block;padding:2px 12px;border-radius:99px;font-size:.8rem;font-weight:600;border:1.5px solid transparent;white-space:nowrap}
+.s-wait{background:var(--acc);color:#111}
+.s-ok{background:var(--ink);color:var(--bg)}
+.s-no{border-color:var(--no);color:var(--no)}
+.s-done{background:var(--line);color:var(--mute)}
+.empty{padding:40px 16px;text-align:center;color:var(--mute)}
+.acts{white-space:nowrap}
+dialog{border:1px solid var(--glass-b);border-radius:28px;background:color-mix(in srgb,var(--bg2) 82%,transparent);backdrop-filter:blur(26px);-webkit-backdrop-filter:blur(26px);color:var(--ink);padding:0;width:min(680px,94vw);max-height:92vh;box-shadow:0 30px 80px rgba(0,0,0,.35)}
+dialog::backdrop{background:rgba(10,14,12,.5);backdrop-filter:blur(4px)}
+form{padding:24px 26px}
+form h2{margin:0 0 16px;font-size:1.35rem;font-weight:800}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.grid .full{grid-column:1/-1}
+@media (max-width:560px){.grid{grid-template-columns:1fr}.hd{padding:14px 18px}}
+label{font-size:.82rem;color:var(--mute);display:block;margin:0 0 3px 6px}
+.fa{display:flex;gap:8px;justify-content:flex-end;margin-top:18px}
+.hint{font-size:.85rem;color:var(--mute);margin:8px 0 0 6px}
+.dept{margin-top:24px}
+.dept h2{font-size:1.15rem;font-weight:800;margin:0 0 10px 6px}
+.dept table{min-width:0}
+.dept th{cursor:default}
+@media print{body{background:#fff;color:#000}.hd{background:none;color:#000;box-shadow:none;padding:0}.dot,header p,.bar,.acts,button{display:none!important}.stat,.tablewrap{background:none;box-shadow:none;backdrop-filter:none;border:1px solid #bbb}.stat:first-child{background:none}table{min-width:0}.s-ok,.s-wait{background:none;color:#000;border-color:#000}}
+.tabs{max-width:1200px;margin:14px auto 0;padding:0 16px;display:flex;gap:8px}
+.tab{padding:8px 24px;font-weight:600}
+.tab[aria-selected="true"]{background:#111;color:#fff;border-color:#111}
+@media (prefers-color-scheme:dark){.tab[aria-selected="true"]{background:var(--acc);color:#111;border-color:var(--acc)}}
+.dgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:14px;margin-top:14px}
+.card{background:var(--glass);backdrop-filter:blur(18px) saturate(1.3);-webkit-backdrop-filter:blur(18px) saturate(1.3);border:1px solid var(--glass-b);border-radius:var(--r);box-shadow:var(--sh);padding:18px 20px}
+.card h3{margin:0 0 12px;font-size:1rem;font-weight:800}
+.card.wide{grid-column:1/-1}
+.cols{display:flex;align-items:flex-end;gap:6px;height:180px}
+.col{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%;min-width:0}
+.col i{display:block;width:100%;max-width:40px;background:var(--ink);border-radius:8px 8px 3px 3px;min-height:2px}
+.col:hover i,.col.pk i{background:var(--acc)}
+.col em{font-style:normal;font-size:.7rem;color:var(--mute);margin-top:4px;white-space:nowrap;height:1.1em}
+.col .v{font-size:.72rem;font-weight:600;margin-bottom:2px}
+.note{color:var(--mute);font-size:.85rem;margin:10px 0 0}
+.hr{display:grid;grid-template-columns:minmax(80px,1.2fr) 2fr auto;gap:10px;align-items:center;padding:5px 0;font-size:.88rem}
+.track{height:12px;background:var(--line);border-radius:99px;overflow:hidden}
+.track i{display:block;height:100%;background:var(--acc);border-radius:99px}
+.stack{display:flex;height:22px;border-radius:99px;overflow:hidden;gap:2px;margin-bottom:12px}
+.stack i{display:block;min-width:4px}
+.leg{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:.85rem}
+.leg span::before{content:"";display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;background:var(--c)}
+.li{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:9px 0;border-bottom:1px solid var(--line)}
+.li:last-child{border:0}
+.li>div:first-child{min-width:0}
+.dp{display:flex;align-items:center;gap:10px;margin-bottom:0}
+.dp label{margin:0}
+.dp select{width:auto;min-width:180px;border-radius:99px}
+@media print{.tabs{display:none}.card{background:none;box-shadow:none;backdrop-filter:none;border:1px solid #bbb}.col i,.track i{background:#555!important}}
+.chip{position:relative;display:inline-block;margin:0 4px 4px 0}
+.chip input{position:absolute;opacity:0;width:0;height:0}
+.chip span{display:inline-block;min-width:44px;text-align:center;padding:5px 10px;border-radius:99px;border:1px solid var(--line);background:var(--field);cursor:pointer;font-size:.9rem;color:var(--ink)}
+.chip input:checked+span{background:#111;color:#fff;border-color:#111}
+.chip input:focus-visible+span{outline:3px solid var(--acc);outline-offset:2px}
+@media (prefers-color-scheme:dark){.chip input:checked+span{background:var(--acc);color:#111;border-color:var(--acc)}}
+.wdrow{display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px}
+.exrow{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.exrow input{width:auto;flex:1;min-width:140px;border-radius:99px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.xc{display:inline-flex;align-items:center;gap:2px;padding:2px 4px 2px 12px;border-radius:99px;background:var(--line);font-size:.85rem}
+.xc button{border:0;background:none;padding:0 8px;font-size:1rem;line-height:1.4}
+.calnav{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.calnav b{font-size:1.1rem;min-width:140px;text-align:center}
+.mtw{overflow-x:auto}
+.mt{border-collapse:separate;border-spacing:0;min-width:760px;width:100%}
+.mt th,.mt td{padding:3px 2px;text-align:center;border-bottom:1px solid var(--line);min-width:26px;cursor:default;font-size:.85rem;font-weight:400}
+.mt th{color:var(--mute);font-weight:600}
+.mt th:first-child,.mt td:first-child{text-align:left;position:sticky;left:0;z-index:1;padding:6px 10px;white-space:nowrap;min-width:120px;background:color-mix(in srgb,var(--bg2) 92%,var(--bg));font-weight:600}
+.mt .we{background:var(--line)}
+.mt th.today .dh{color:var(--acc);text-decoration:underline}
+.mt .wl{display:block;font-size:.65rem;font-weight:400}
+.mt .ft td{font-weight:700;color:var(--mute);border-bottom:0}
+.dh{border:0;background:none;padding:0 4px;font:inherit;font-weight:700;border-radius:6px;color:inherit;cursor:pointer}
+.mk{display:block;width:100%;height:24px;border:0;border-radius:7px;background:var(--acc);padding:0}
+.mk:hover{background:var(--ink)}
+.mk.sel{outline:2px solid var(--ink);outline-offset:1px}
+.seg{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap}
+.seg button[aria-pressed="true"]{background:#111;color:#fff;border-color:#111}
+@media (prefers-color-scheme:dark){.seg button[aria-pressed="true"]{background:var(--acc);color:#111;border-color:var(--acc)}}
+.calnav{flex-wrap:wrap}
+.bk{min-width:640px}
+.bk th{cursor:default}
+.bk tr.first td{border-top:2px solid var(--line)}
+.bk td.dt{font-weight:600;white-space:nowrap;border-right:1px solid var(--line);background:var(--glass)}
+.bk td.wkend{color:var(--acc)}
+.bk tbody tr:hover td{background:none}
+.bk tbody tr:hover td.dt{background:var(--glass)}
+.cal{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px;min-width:640px}
+.ch{text-align:center;font-weight:600;font-size:.82rem;color:var(--mute)}
+.cd0{min-height:0}
+.cd{display:flex;flex-direction:column;align-items:stretch;gap:3px;min-height:104px;padding:6px;text-align:left;border-radius:14px;background:var(--field);border:1px solid var(--line);cursor:pointer}
+.cd:hover{background:var(--glass-b)}
+.cd.we{background:var(--line)}
+.cd.td{border:2px solid var(--acc)}
+.cd.sel{outline:2px solid var(--ink);outline-offset:1px}
+.cd b{font-size:.85rem}
+.bc{display:block;color:#fff;font-size:.72rem;line-height:1.4;padding:1px 8px;border-radius:99px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.more{font-size:.72rem;color:var(--mute);padding-left:4px}
+.dotb{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:8px}
+.warn{color:var(--no);font-size:.85rem;font-weight:600}
+.notice{margin:0 0 14px;padding:12px 18px;border:2px solid var(--acc)}
+.nrow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:2px 0}
+</style>
+</head>
+<body>
+<header><div class="hd"><div class="dot" aria-hidden="true"></div><div><h1>ทะเบียนขอเปิดใช้ระบบปรับอากาศ</h1><p>บันทึกประวัติการขอใช้ของแต่ละหน่วยงาน · ข้อมูลเก็บในเบราว์เซอร์เครื่องนี้</p></div></div></header>
+<nav class="tabs" aria-label="เมนู"><button class="tab" id="tabDash" aria-selected="true">แดชบอร์ด</button><button class="tab" id="tabList" aria-selected="false">ทะเบียนคำขอ</button></nav>
+<main>
+<div id="notice" class="card notice" role="status" hidden></div>
+<section id="viewDash"><div class="bar panel dp"><label for="dPeriod">ช่วงเวลา</label><select id="dPeriod"></select></div><div id="dBody"></div></section>
+<div id="viewList" hidden>
+  <section class="stats" id="stats"></section>
+
+  <div class="bar panel">
+    <input class="grow" id="q" type="search" placeholder="ค้นหา หน่วยงาน ผู้ขอ ห้อง เหตุผล" aria-label="ค้นหา">
+    <select id="fDept" aria-label="กรองหน่วยงาน"></select>
+    <input id="fMonth" type="month" aria-label="กรองเดือน">
+    <button id="clear">ล้างตัวกรอง</button>
+  </div>
+  <div class="bar">
+    <button class="primary" id="add">+ เพิ่มคำขอ</button>
+    <button id="csv">ส่งออก CSV</button>
+    <button id="bak">สำรองข้อมูล</button>
+    <button id="res">นำข้อมูลกลับ</button>
+    <button id="prn">พิมพ์</button>
+    <input type="file" id="file" accept=".json" hidden>
+  </div>
+
+  <div class="tablewrap"><table>
+    <thead><tr id="thead"></tr></thead>
+    <tbody id="rows"></tbody>
+  </table></div>
+
+  <section class="dept" id="deptSum"></section>
+</div>
+</main>
+
+<dialog id="dlg">
+  <form id="f" method="dialog">
+    <h2 id="dt">เพิ่มคำขอ</h2>
+    <div class="grid">
+      <div class="full"><label for="dept">หน่วยงาน *</label><input id="dept" list="deptList" required><datalist id="deptList"></datalist></div>
+      <div><label for="who">ผู้ขอ / เบอร์โทร</label><input id="who"></div>
+      <div><label for="reqDate">วันที่ยื่นคำขอ *</label><input id="reqDate" type="date" required></div>
+      <div><label for="floor">ชั้น</label><input id="floor" placeholder="เช่น 3"></div>
+      <div><label for="building">อาคาร</label><input id="building" placeholder="เช่น อาคาร A"></div>
+      <div class="full"><label for="area">พื้นที่ / ห้องที่ขอเปิด *</label><input id="area" required></div>
+      <div><label for="useDate">ใช้งานตั้งแต่วันที่ *</label><input id="useDate" type="date" required></div>
+      <div><label for="useEnd">ถึงวันที่ (เว้นว่างถ้าใช้วันเดียว)</label><input id="useEnd" type="date"></div>
+      <div class="full"><label>วันในสัปดาห์ที่ใช้งาน</label><div class="wdrow"><span id="wd"></span><button type="button" class="sm" id="wdWork">วันทำการ (จ–ศ)</button><button type="button" class="sm" id="wdAll">ทุกวัน</button></div></div>
+      <div class="full"><label>ยกเว้นวันที่ (เช่น วันหยุดนักขัตฤกษ์)</label>
+        <div class="exrow"><input id="exA" type="date" aria-label="ยกเว้นตั้งแต่วันที่"><span>ถึง</span><input id="exB" type="date" aria-label="ยกเว้นถึงวันที่ (เว้นว่างถ้าวันเดียว)"><button type="button" id="exAdd">เพิ่ม</button></div>
+        <div class="chips" id="exChips"></div></div>
+      <div><label for="t1">เวลาเริ่ม *</label><input id="t1" type="time" value="08:00" required></div>
+      <div><label for="t2">เวลาสิ้นสุด *</label><input id="t2" type="time" value="17:00" required></div>
+      <div class="full"><label for="why">เหตุผลที่ขอ</label><textarea id="why" rows="2" placeholder="เช่น ประชุม อบรม ทำงานนอกเวลา"></textarea></div>
+      <div class="full"><label for="note">หมายเหตุ</label><input id="note"></div>
+    </div>
+    <p class="hint" id="hrs"></p>
+    <p class="hint warn" id="cflt"></p>
+    <div class="fa"><button type="button" id="cancel">ยกเลิก</button><button class="primary" id="save" type="submit" value="save">บันทึก</button></div>
+  </form>
+</dialog>
+
+<script>
+const KEY="aircon_requests_v1";
+const COLS=[["reqDate","วันที่ยื่น"],["dept","หน่วยงาน"],["area","พื้นที่"],["useDate","วันที่ใช้งาน"],["time","เวลา"],["hours","ชม."],["note","หมายเหตุ"]];
+let data=[],sort={k:"useDate",d:-1},editId=null;
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+function persist(){try{localStorage.setItem(KEY,JSON.stringify(data))}catch(e){alert("บันทึกลงเบราว์เซอร์ไม่ได้ กรุณากด 'สำรองข้อมูล' เก็บไว้ก่อน")}}
+const WD=["อา","จ","อ","พ","พฤ","ศ","ส"];
+const addD=(d,n)=>{const x=new Date(d+"T00:00:00Z");x.setUTCDate(x.getUTCDate()+n);return x.toISOString().slice(0,10)};
+const isEx=(d,ex)=>(ex||[]).some(e=>{const[a,b]=e.split("~");return d>=a&&d<=(b||a)});
+function days(r,P=""){
+  if(!r.useDate)return[];
+  const end=r.useEnd&&r.useEnd>=r.useDate?r.useEnd:r.useDate,wd=r.wd&&r.wd.length?r.wd:[0,1,2,3,4,5,6],out=[];
+  for(let d=r.useDate,i=0;d<=end&&i<1100;d=addD(d,1),i++){
+    if(P&&!d.startsWith(P))continue;
+    if(!wd.includes(new Date(d+"T00:00:00Z").getUTCDay())||isEx(d,r.excl))continue;
+    out.push(d)}
+  return out}
+function hpd(r){const[a,b]=[r.t1,r.t2].map(t=>{const[h,m]=(t||"0:0").split(":");return +h*60+ +m});let d=b-a;if(d<0)d+=1440;return Math.round(d/6)/10}
+function hoursIn(r,P=""){return Math.round(hpd(r)*days(r,P).length*10)/10}
+function hours(r){return hoursIn(r)}
+const rng=r=>thDate(r.useDate)+(r.useEnd&&r.useEnd!==r.useDate?" – "+thDate(r.useEnd):"");
+const loc=r=>[r.building&&"อาคาร "+r.building,r.floor&&"ชั้น "+r.floor].filter(Boolean).join(" · ");
+const ak=r=>[loc(r),r.area].filter(Boolean).join(" · ");
+function wdLabel(r){const w=(r.wd&&r.wd.length?r.wd:[0,1,2,3,4,5,6]).slice().sort((a,b)=>(a+6)%7-(b+6)%7);if(w.length===7)return"";if(w.join()==="1,2,3,4,5")return"จ–ศ";return w.map(i=>WD[i]).join(" ")}
+function thDate(s){if(!s)return"";const[y,m,d]=s.split("-");return `${d}/${m}/${+y+543}`}
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6)}
+
+function fill(sel,items,first){sel.innerHTML=`<option value="">${first}</option>`+items.map(([v,t])=>`<option value="${esc(v)}">${esc(t)}</option>`).join("")}
+function filtered(){
+  const q=$("q").value.trim().toLowerCase(),d=$("fDept").value,m=$("fMonth").value;
+  return data.filter(r=>(!d||r.dept===d)&&(!m||days(r,m).length>0)&&
+    (!q||[r.dept,r.who,r.building,r.floor,r.area,r.why,r.note].join(" ").toLowerCase().includes(q)));
+}
+function render(){const c=conflictIds();CFL=c.ids;CFD=c.ds;renderDash();
+  const depts=[...new Set(data.map(r=>r.dept))].sort((a,b)=>a.localeCompare(b,"th"));
+  const cur=$("fDept").value;fill($("fDept"),depts.map(x=>[x,x]),"ทุกหน่วยงาน");$("fDept").value=depts.includes(cur)?cur:"";
+  $("deptList").innerHTML=depts.map(x=>`<option value="${esc(x)}">`).join("");
+  const list=filtered(),mon=$("fMonth").value;
+  const val=(r,k)=>k==="hours"?hours(r):k==="time"?r.t1:(r[k]||"");
+  list.sort((a,b)=>{const x=val(a,sort.k),y=val(b,sort.k);return (x>y?1:x<y?-1:0)*sort.d});
+  $("thead").innerHTML=COLS.map(([k,t])=>`<th data-k="${k}" tabindex="0" aria-sort="${sort.k===k?(sort.d>0?"ascending":"descending"):"none"}">${t}${sort.k===k?(sort.d>0?" ▲":" ▼"):""}</th>`).join("")+"<th></th>";
+  $("rows").innerHTML=list.length?list.map(r=>`<tr>
+    <td>${thDate(r.reqDate)}</td>
+    <td>${esc(r.dept)}${r.who?`<span class="sub">${esc(r.who)}</span>`:""}</td>
+    <td>${esc(r.area)}${CFL.has(r.id)?CTAG:""}${loc(r)?`<span class="sub">${esc(loc(r))}</span>`:""}${r.why?`<span class="sub">${esc(r.why)}</span>`:""}</td>
+    <td>${rng(r)}<span class="sub">${days(r,mon).length} วัน${wdLabel(r)?" · "+wdLabel(r):""}${(r.excl||[]).length?" · ยกเว้น "+r.excl.length+" รายการ":""}</span></td>
+    <td class="num">${esc(r.t1)}–${esc(r.t2)}</td>
+    <td class="num">${hoursIn(r,mon)}<span class="sub">${hpd(r)} ชม./วัน</span></td>
+    <td>${esc(r.note)}</td>
+    <td class="acts"><button class="sm" data-e="${r.id}">แก้ไข</button> <button class="sm danger" data-d="${r.id}">ลบ</button></td></tr>`).join("")
+    :`<tr><td colspan="8" class="empty">${data.length?"ไม่พบรายการที่ตรงกับตัวกรอง":"ยังไม่มีคำขอ กด “+ เพิ่มคำขอ” เพื่อบันทึกรายการแรก"}</td></tr>`;
+  const tot=list.reduce((a,r)=>a+hoursIn(r,mon),0);
+  const S=[[list.length,"คำขอทั้งหมด"],[new Set(list.map(r=>r.dept)).size,"หน่วยงาน"],[tot.toFixed(1),"ชั่วโมงใช้งานรวม"],[list.length?(tot/list.length).toFixed(1):"–","เฉลี่ยชั่วโมง/คำขอ"]];
+  $("stats").innerHTML=S.map(([n,t])=>`<div class="stat"><b>${n}</b><span>${t}</span></div>`).join("");
+  const g={};list.forEach(r=>{const o=g[r.dept]??={n:0,h:0};o.n++;o.h+=hoursIn(r,mon)});
+  const ks=Object.keys(g).sort((a,b)=>g[b].h-g[a].h);
+  $("deptSum").innerHTML=ks.length?`<h2>สรุปตามหน่วยงาน</h2><div class="tablewrap"><table><thead><tr><th>หน่วยงาน</th><th>จำนวนคำขอ</th><th>ชั่วโมงรวม</th></tr></thead><tbody>${ks.map(k=>`<tr><td>${esc(k)}</td><td>${g[k].n}</td><td>${g[k].h.toFixed(1)}</td></tr>`).join("")}</tbody></table></div>`:"";
+}
+function openForm(r){
+  editId=r?r.id:null;$("dt").textContent=r?"แก้ไขคำขอ":"เพิ่มคำขอ";
+  const v=r||{reqDate:todayS(),t1:"08:00",t2:"17:00"};
+  ["dept","who","reqDate","building","floor","area","useDate","useEnd","t1","t2","why","note"].forEach(k=>$(k).value=v[k]||"");
+  setWd(v.wd||[0,1,2,3,4,5,6]);exList=[...(v.excl||[])];drawEx();$("exA").value=$("exB").value="";hint();$("dlg").showModal();$("dept").focus();
+}
+function download(name,text,type){const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([text],{type}));a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),500)}
+
+["q","fDept","fMonth"].forEach(i=>$(i).addEventListener("input",render));
+$("clear").onclick=()=>{["q","fDept","fMonth"].forEach(i=>$(i).value="");render()};
+$("add").onclick=()=>openForm();
+$("cancel").onclick=()=>$("dlg").close();
+$("f").addEventListener("submit",e=>{
+  const rec={id:editId||uid()};["dept","who","reqDate","building","floor","area","useDate","useEnd","t1","t2","why","note"].forEach(k=>rec[k]=$(k).value.trim());
+  rec.wd=getWd();rec.excl=[...exList];
+  if(rec.useEnd&&rec.useEnd<rec.useDate){e.preventDefault();$("hrs").textContent="วันสิ้นสุดต้องไม่ก่อนวันเริ่มต้น";return}
+  if(!days(rec).length){e.preventDefault();$("hrs").textContent="ไม่มีวันที่ตรงเงื่อนไข กรุณาตรวจสอบวันในสัปดาห์และวันที่ยกเว้น";return}
+  if(rec.t1===rec.t2){e.preventDefault();$("hrs").textContent="เวลาเริ่มและเวลาสิ้นสุดต้องไม่เท่ากัน";return}
+  if(rec.t2<rec.t1&&!confirm(`เวลาสิ้นสุด (${rec.t2}) น้อยกว่าเวลาเริ่ม (${rec.t1})\nระบบจะนับเป็นการใช้งานข้ามเที่ยงคืน รวม ${hpd(rec)} ชม./วัน\nยืนยันหรือไม่?`)){e.preventDefault();return}
+  const cf=conflictsFor(rec,editId);
+  if(cf.length&&!confirm(`พบการขอซ้อนเวลา ${cf.length} วัน:\n`+cf.slice(0,4).map(c=>`• ${thDate(c.d)} ${c.r.dept} ${c.r.t1}–${c.r.t2}`).join("\n")+(cf.length>4?`\n… และอีก ${cf.length-4} วัน`:"")+"\n\nต้องการบันทึกต่อหรือไม่?")){e.preventDefault();return}
+  if(editId)data=data.map(r=>r.id===editId?rec:r);else data.push(rec);
+  persist();render();
+});
+$("thead").addEventListener("click",e=>{const k=e.target.dataset.k;if(!k)return;sort=sort.k===k?{k,d:-sort.d}:{k,d:1};render()});
+$("thead").addEventListener("keydown",e=>{if(e.key==="Enter")e.target.click()});
+$("rows").addEventListener("click",e=>{
+  const ed=e.target.dataset.e,del=e.target.dataset.d;
+  if(ed)openForm(data.find(r=>r.id===ed));
+  if(del&&confirm("ลบคำขอนี้ใช่หรือไม่? การลบไม่สามารถย้อนกลับได้")){data=data.filter(r=>r.id!==del);persist();render()}
+});
+$("csv").onclick=()=>{
+  const h=["วันที่ยื่น","หน่วยงาน","ผู้ขอ/เบอร์โทร","อาคาร","ชั้น","พื้นที่","วันที่เริ่ม","วันที่สิ้นสุด","วันในสัปดาห์","วันที่ยกเว้น","จำนวนวันใช้งาน","เวลาเริ่ม","เวลาสิ้นสุด","ชั่วโมง/วัน","ชั่วโมงรวม","เหตุผล","หมายเหตุ"];
+  const c=s=>`"${String(s??"").replace(/"/g,'""')}"`;
+  const rows=filtered().map(r=>[r.reqDate,r.dept,r.who,r.building,r.floor,r.area,r.useDate,r.useEnd||r.useDate,wdLabel(r)||"ทุกวัน",(r.excl||[]).join(" ; "),days(r).length,r.t1,r.t2,hpd(r),hours(r),r.why,r.note].map(c).join(","));
+  download("aircon-requests.csv","\ufeff"+[h.map(c).join(","),...rows].join("\r\n"),"text/csv");
+};
+$("bak").onclick=()=>{download(`aircon-backup-${new Date().toISOString().slice(0,10)}.json`,JSON.stringify(data,null,1),"application/json");try{localStorage.setItem(KEY+"_bak",Date.now())}catch(e){}notes.length=0;drawNotice()};
+$("res").onclick=()=>$("file").click();
+$("file").onchange=e=>{
+  const f=e.target.files[0];if(!f)return;const rd=new FileReader();
+  rd.onload=()=>{try{const a=JSON.parse(rd.result);if(!Array.isArray(a))throw 0;const{out,drop}=cleanAll(a);
+    if(confirm(`พบ ${out.length} รายการที่ใช้ได้${drop?` (ข้าม ${drop} รายการที่ข้อมูลไม่สมบูรณ์)`:""}\nต้องการแทนที่ข้อมูลปัจจุบันทั้งหมดหรือไม่?`)){data=out;persist();render()}}
+    catch(x){alert("ไฟล์ไม่ถูกต้อง กรุณาเลือกไฟล์สำรองที่ได้จากปุ่ม 'สำรองข้อมูล'")}};
+  rd.readAsText(f);e.target.value="";
+};
+$("prn").onclick=()=>window.print();
+const TH=["ม.ค.","ก.พ.","มี.ค.","เม.ย.","พ.ค.","มิ.ย.","ก.ค.","ส.ค.","ก.ย.","ต.ค.","พ.ย.","ธ.ค."];
+const mLabel=ym=>{const[y,m]=ym.split("-");return TH[+m-1]+" "+String(+y+543).slice(2)};
+function cols(items,showV){
+  const mx=Math.max(...items.map(i=>i.v),0)||1,top=items.findIndex(i=>i.v===mx&&mx>0);
+  return `<div class="cols">`+items.map((i,x)=>`<div class="col${x===top&&items.length>12?" pk":""}" title="${esc(i.t)}"><span class="v">${showV&&i.v?i.v:""}</span><i style="height:${i.v/mx*100}%"></i><em>${esc(i.l)}</em></div>`).join("")+`</div>`;
+}
+const THF=["มกราคม","กุมภาพันธ์","มีนาคม","เมษายน","พฤษภาคม","มิถุนายน","กรกฎาคม","สิงหาคม","กันยายน","ตุลาคม","พฤศจิกายน","ธันวาคม"];
+let calView="cal",calM="",calSel=null,calDepts=[];
+function todayS(){const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`}
+function bookHtml(){
+  const rows=[];data.forEach(r=>days(r,calM).forEach(d=>rows.push({d,r})));
+  rows.sort((a,b)=>a.d.localeCompare(b.d)||(a.r.t1||"").localeCompare(b.r.t1||"")||(a.r.building||"").localeCompare(b.r.building||"","th")||(a.r.floor||"").localeCompare(b.r.floor||"","th",{numeric:true}));
+  const cnt={};rows.forEach(x=>cnt[x.d]=(cnt[x.d]||0)+1);
+  let last="";
+  const body=rows.map(({d,r})=>{
+    const first=d!==last;last=d;const w=new Date(d+"T00:00:00Z").getUTCDay();
+    return `<tr class="${first?"first":""}">`+(first?`<td class="dt${w===0||w===6?" wkend":""}" rowspan="${cnt[d]}">${WD[w]} ${thDate(d)}</td>`:"")+
+      `<td class="num">${esc(r.t1)}–${esc(r.t2)}${r.t2<=r.t1?" (+1)":""}</td><td>${esc(r.floor)}</td><td>${esc(r.building)}</td><td>${esc(r.dept)}${CFD.has(r.id+"|"+d)?CTAG:""}${r.who?`<span class="sub">${esc(r.who)}</span>`:""}</td><td>${esc(r.area)}</td></tr>`}).join("");
+  return `<div class="mtw"><table class="bk"><thead><tr><th>วันที่</th><th>เวลา</th><th>ชั้น</th><th>อาคาร</th><th>ฝ่าย</th><th>พื้นที่ / ห้อง</th></tr></thead><tbody>${body}</tbody></table></div><p class="note">แสดงเฉพาะวันที่ใช้งานจริงตามเงื่อนไขของแต่ละคำขอ · ${rows.length} รายการใน ${Object.keys(cnt).length} วัน</p>`;
+}
+const BCOL=[14,205,145,275,45,335,175,235];
+function bcol(b){if(!b)return"#6b7570";const all=[...new Set(data.map(r=>r.building).filter(Boolean))].sort((x,y)=>x.localeCompare(y,"th",{numeric:true}));return `hsl(${BCOL[all.indexOf(b)%BCOL.length]} 58% 36%)`}
+function calGrid(){
+  const[y,m]=calM.split("-").map(Number),N=new Date(Date.UTC(y,m,0)).getUTCDate(),first=new Date(Date.UTC(y,m-1,1)).getUTCDay(),T=todayS();
+  const by={},used=new Set();data.forEach(r=>days(r,calM).forEach(d=>(by[d]??=[]).push(r)));
+  const cmp=(a,b)=>(a.building||"").localeCompare(b.building||"","th",{numeric:true})||(a.floor||"").localeCompare(b.floor||"","th",{numeric:true});
+  let cells=WD.map(w=>`<div class="ch">${w}</div>`).join("")+'<div class="cd0"></div>'.repeat(first);
+  for(let i=1;i<=N;i++){
+    const d=`${calM}-${String(i).padStart(2,"0")}`,rs=(by[d]||[]).slice().sort(cmp),w=new Date(Date.UTC(y,m-1,i)).getUTCDay();
+    rs.forEach(r=>used.add(r.building||""));
+    cells+=`<button type="button" class="cd${w===0||w===6?" we":""}${d===T?" td":""}${calSel&&calSel.d===d?" sel":""}" data-cd="${d}"><b>${i}</b>`
+      +rs.slice(0,3).map(r=>`<span class="bc" style="background:${bcol(r.building)}" title="${esc(ak(r)+" · "+r.t1+"–"+r.t2+" · "+r.dept)}">${CFD.has(r.id+"|"+d)?"⚠ ":""}${esc(r.dept)}${r.floor?" ชั้น "+esc(r.floor):""}</span>`).join("")
+      +(rs.length>3?`<span class="more">+${rs.length-3} รายการ</span>`:"")+`</button>`;
+  }
+  const legend=`<div class="leg" style="margin-bottom:10px">`+[...used].sort((a,b)=>a.localeCompare(b,"th",{numeric:true})).map(b=>`<span style="--c:${bcol(b)}">${b?"อาคาร "+esc(b):"ไม่ระบุอาคาร"}</span>`).join("")+`</div>`;
+  const nc=[...CFD].filter(k=>k.split("|")[1].startsWith(calM)).length;
+  const sel=calSel&&calSel.d.startsWith(calM)?calSel:null;
+  let det=(nc?`<p class="warn">⚠ เดือนนี้มีการขอซ้อนเวลา ${nc} รายการ-วัน (ป้ายที่มีเครื่องหมาย ⚠)</p>`:"")+`<p class="note">สีของป้ายแยกตามอาคาร · คลิกวันที่เพื่อดูรายละเอียดทุกรายการของวันนั้น</p>`;
+  if(sel){
+    const items=data.filter(r=>days(r,sel.d).length).sort((a,b)=>(a.t1||"").localeCompare(b.t1||"")||cmp(a,b));
+    det=`<h3 style="margin:16px 0 4px">${thDate(sel.d)}</h3>`+(items.length?items.map(r=>`<div class="li"><div><span class="dotb" style="background:${bcol(r.building)}"></span>${esc(r.dept)} · ${esc(ak(r))}<span class="sub">${esc(r.t1)}–${esc(r.t2)} (${hpd(r)} ชม.)${r.who?" · "+esc(r.who):""}${r.why?" · "+esc(r.why):""}</span></div></div>`).join(""):`<div class="empty">ไม่มีคำขอในวันนี้</div>`);
+  }
+  return legend+`<div class="mtw"><div class="cal">${cells}</div></div>`+det;
+}
+function calHtml(){
+  const[y,m]=calM.split("-").map(Number),N=new Date(Date.UTC(y,m,0)).getUTCDate(),T=todayS();
+  const D=i=>`${calM}-${String(i).padStart(2,"0")}`,wk=i=>{const w=new Date(Date.UTC(y,m-1,i)).getUTCDay();return w===0||w===6};
+  const g={};data.forEach(r=>days(r,calM).forEach(d=>{const o=g[r.dept]??={d:{},h:0};(o.d[d]??=[]).push(r);o.h+=hpd(r)}));
+  const ks=Object.keys(g).sort((a,b)=>a.localeCompare(b,"th"));calDepts=ks;
+  const nav=`<div class="calnav"><button class="sm" data-cal="-1" aria-label="เดือนก่อนหน้า">‹</button><b>${THF[m-1]} ${y+543}</b><button class="sm" data-cal="1" aria-label="เดือนถัดไป">›</button><button class="sm" data-cal="0">เดือนนี้</button><span class="seg"><button class="sm" data-cv="cal" aria-pressed="${calView==="cal"}">ปฏิทิน</button><button class="sm" data-cv="book" aria-pressed="${calView==="book"}">ตาราง Booking</button><button class="sm" data-cv="grid" aria-pressed="${calView==="grid"}">ภาพรวมรายวัน</button></span></div>`;
+  if(!ks.length)return nav+`<div class="empty">เดือนนี้ไม่มีคำขอเปิดระบบปรับอากาศ</div>`;
+  if(calView==="cal")return nav+calGrid();
+  if(calView==="book")return nav+bookHtml();
+  const sel=calSel&&calSel.d.startsWith(calM)?calSel:null,idx=[...Array(N).keys()].map(i=>i+1);
+  const head=`<tr><th>หน่วยงาน</th>`+idx.map(i=>`<th class="${wk(i)?"we":""}${D(i)===T?" today":""}"><button class="dh" data-cd="${D(i)}" title="ดูทุกฝ่ายวันที่ ${i}">${i}</button><span class="wl">${WD[new Date(Date.UTC(y,m-1,i)).getUTCDay()]}</span></th>`).join("")+`<th>วัน</th><th>ชม.</th></tr>`;
+  const rows=ks.map((k,ci)=>`<tr><td>${esc(k)}</td>`+idx.map(i=>{const rs=g[k].d[D(i)],c=wk(i)?"we":"";
+    return rs?`<td class="${c}"><button class="mk${sel&&sel.d===D(i)&&sel.ci===ci?" sel":""}" data-cd="${D(i)}" data-ci="${ci}" title="${esc(rs.map(r=>ak(r)+" "+r.t1+"–"+r.t2).join("\n"))}" aria-label="${esc(k)} วันที่ ${i}"></button></td>`:`<td class="${c}"></td>`}).join("")+`<td>${Object.keys(g[k].d).length}</td><td>${g[k].h.toFixed(1)}</td></tr>`).join("");
+  const foot=`<tr class="ft"><td>รวม (ฝ่าย)</td>`+idx.map(i=>{const n=ks.filter(k=>g[k].d[D(i)]).length;return `<td class="${wk(i)?"we":""}">${n||""}</td>`}).join("")+`<td></td><td></td></tr>`;
+  let det=`<p class="note">คลิกช่องสีเพื่อดูรายละเอียด หรือคลิกเลขวันที่เพื่อดูทุกฝ่ายในวันนั้น · คอลัมน์แรเงาคือเสาร์–อาทิตย์</p>`;
+  if(sel){
+    const items=sel.ci===null?ks.flatMap(k=>(g[k].d[sel.d]||[]).map(r=>[k,r])):(g[ks[sel.ci]].d[sel.d]||[]).map(r=>[ks[sel.ci],r]);
+    det=`<h3 style="margin:16px 0 4px">${thDate(sel.d)}${sel.ci===null?"":" · "+esc(ks[sel.ci])}</h3>`+(items.length?items.map(([k,r])=>`<div class="li"><div>${esc(k)} · ${esc(ak(r))}<span class="sub">${esc(r.t1)}–${esc(r.t2)} (${hpd(r)} ชม.)${r.who?" · "+esc(r.who):""}${r.why?" · "+esc(r.why):""}</span></div></div>`).join(""):`<div class="empty">ไม่มีคำขอในวันนี้</div>`);
+  }
+  return nav+`<div class="mtw"><table class="mt"><thead>${head}</thead><tbody>${rows}${foot}</tbody></table></div>`+det;
+}
+function renderDash(){
+  const sel=$("dPeriod"),cur=sel.value;
+  const months=[...new Set(data.flatMap(r=>days(r).map(d=>d.slice(0,7))))].sort().reverse();
+  const years=[...new Set(months.map(m=>m.slice(0,4)))];
+  sel.innerHTML=`<option value="">ทุกช่วงเวลา</option>`+years.map(y=>`<option value="${y}">ปี ${+y+543}</option>`).join("")+months.map(m=>`<option value="${m}">เดือน ${mLabel(m)}</option>`).join("");
+  sel.value=[...sel.options].some(o=>o.value===cur)?cur:"";
+  const P=sel.value,list=data.filter(r=>days(r,P).length>0);
+  const B=$("dBody"),sc0=(B.querySelector(".mtw")||{}).scrollLeft||0;
+  if(!calM){const t=todayS().slice(0,7);calM=months.includes(t)||!months.length?t:months[0]}
+  if(!list.length){B.innerHTML=`<div class="card empty" style="margin-top:14px">${data.length?"ไม่มีคำขอในช่วงเวลานี้":"ยังไม่มีข้อมูล เริ่มบันทึกคำขอแรกเพื่อดูภาพรวม"}<br><br><button class="primary" data-add="1">+ เพิ่มคำขอ</button></div>`;return}
+  const H=a=>a.reduce((x,r)=>x+hoursIn(r,P),0),tot=H(list);
+  const K=[[list.length,"คำขอทั้งหมด"],[new Set(list.map(r=>r.dept)).size,"หน่วยงานที่ขอใช้"],[tot.toFixed(1),"ชั่วโมงใช้งานรวม"],[(tot/list.length).toFixed(1),"เฉลี่ยชั่วโมง/คำขอ"]];
+  const kpi=`<section class="stats" style="margin-top:14px">`+K.map(([n,t])=>`<div class="stat"><b>${n}</b><span>${t}</span></div>`).join("")+`</section>`;
+  const mm={};list.forEach(r=>days(r,P).forEach(d=>{const m=d.slice(0,7);mm[m]=(mm[m]||0)+hpd(r)}));
+  const ml=Object.keys(mm).sort().slice(-12).map(m=>({l:mLabel(m),v:+mm[m].toFixed(1),t:`${mLabel(m)}: ${mm[m].toFixed(1)} ชม.`}));
+  const hc=Array(24).fill(0);
+  list.forEach(r=>{const nd=days(r,P).length,[a,b]=[r.t1,r.t2].map(t=>{const[h,m]=(t||"0:0").split(":");return +h*60+ +m});const seg=b>a?[[a,b]]:[[a,1440],[0,b]];
+    for(let h=0;h<24;h++)if(seg.some(([s,e])=>Math.min(e,h*60+60)>Math.max(s,h*60)))hc[h]+=nd});
+  const hm=Math.max(...hc),hp=hc.indexOf(hm);
+  const hl=hc.map((v,h)=>({l:h%3===0?String(h).padStart(2,"0"):"",v,t:`${String(h).padStart(2,"0")}:00 – ${v} ครั้ง`}));
+  const g={};list.forEach(r=>{const o=g[r.dept]??={n:0,h:0};o.n++;o.h+=hoursIn(r,P)});
+  const dk=Object.keys(g).sort((a,b)=>g[b].h-g[a].h||g[b].n-g[a].n).slice(0,8),dm=Math.max(...dk.map(k=>g[k].h),1);
+  const dept=dk.map(k=>`<div class="hr"><span>${esc(k)}</span><div class="track"><i style="width:${g[k].h/dm*100}%"></i></div><b>${g[k].h.toFixed(1)} ชม. <span class="sub" style="display:inline">· ${g[k].n} คำขอ</span></b></div>`).join("");
+  const ar={};list.forEach(r=>{const o=ar[ak(r)]??={n:0,h:0};o.n++;o.h+=hoursIn(r,P)});
+  const area=Object.keys(ar).sort((a,b)=>ar[b].n-ar[a].n||ar[b].h-ar[a].h).slice(0,5).map(k=>`<div class="li"><div>${esc(k)}</div><b>${ar[k].n} ครั้ง <span class="sub" style="display:inline">· ${ar[k].h.toFixed(1)} ชม.</span></b></div>`).join("");
+  const rec=[...list].sort((a,b)=>(b.reqDate||"").localeCompare(a.reqDate||"")).slice(0,6).map(r=>`<div class="li"><div>${esc(r.dept)} · ${esc(ak(r))}<span class="sub">ยื่น ${thDate(r.reqDate)} · ใช้ ${rng(r)} ${esc(r.t1)}–${esc(r.t2)}</span></div><b>${hoursIn(r,P)} ชม.</b></div>`).join("");
+  B.innerHTML=kpi+`<div class="card" style="margin-top:14px"><h3>ปฏิทินและตาราง Booking การขอเปิดระบบปรับอากาศ</h3>${calHtml()}</div><div class="dgrid">
+   <div class="card"><h3>ชั่วโมงใช้งานรายเดือน</h3>${cols(ml,true)}</div>
+   <div class="card"><h3>ช่วงเวลาของวันที่มีการใช้ (นับตามวันใช้งาน)</h3>${cols(hl,false)}<p class="note">หนาแน่นที่สุด ${String(hp).padStart(2,"0")}:00–${String(hp+1).padStart(2,"0")}:00 รวม ${hm} ครั้ง</p></div>
+   <div class="card"><h3>ชั่วโมงใช้งานแยกตามหน่วยงาน</h3>${dept}</div>
+   <div class="card"><h3>พื้นที่ที่ขอบ่อยที่สุด</h3>${area}</div>
+   <div class="card wide"><h3>คำขอล่าสุด</h3>${rec}</div></div>`;
+  const mw=B.querySelector(".mtw");if(mw)mw.scrollLeft=sc0;
+}
+$("dPeriod").addEventListener("input",()=>{const v=$("dPeriod").value;if(/^\d{4}-\d{2}$/.test(v)){calM=v;calSel=null}renderDash()});
+$("dBody").addEventListener("click",e=>{
+  const b=e.target.closest("button");if(!b)return;const t=b.dataset;
+  if(t.add)openForm();
+  if(t.cv){calView=t.cv;renderDash()}
+  if(t.cal!==undefined){const[y,m]=calM.split("-").map(Number);calM=t.cal==="0"?todayS().slice(0,7):new Date(Date.UTC(y,m-1+ +t.cal,1)).toISOString().slice(0,7);calSel=null;renderDash()}
+  if(t.cd){calSel={d:t.cd,ci:t.ci===undefined?null:+t.ci};renderDash()}
+});
+function show(v){const d=v==="dash";$("viewDash").hidden=!d;$("viewList").hidden=d;$("tabDash").setAttribute("aria-selected",d);$("tabList").setAttribute("aria-selected",!d)}
+$("tabDash").onclick=()=>show("dash");$("tabList").onclick=()=>show("list");
+let exList=[];
+$("wd").innerHTML=[1,2,3,4,5,6,0].map(i=>`<label class="chip"><input type="checkbox" value="${i}" checked><span>${WD[i]}</span></label>`).join("");
+const getWd=()=>[...document.querySelectorAll("#wd input:checked")].map(i=>+i.value);
+const setWd=a=>document.querySelectorAll("#wd input").forEach(i=>i.checked=a.includes(+i.value));
+function drawEx(){$("exChips").innerHTML=exList.map((e,i)=>{const[a,b]=e.split("~");return `<span class="xc">${thDate(a)}${b?" – "+thDate(b):""}<button type="button" data-x="${i}" aria-label="ลบวันยกเว้น">×</button></span>`}).join("")}
+function hint(){
+  const r={useDate:$("useDate").value,useEnd:$("useEnd").value,t1:$("t1").value,t2:$("t2").value,wd:getWd(),excl:exList};
+  $("cflt").textContent="";
+  if(!r.useDate||!r.t1||!r.t2){$("hrs").textContent="";return}
+  if(r.t1===r.t2){$("hrs").textContent="เวลาเริ่มและเวลาสิ้นสุดต้องไม่เท่ากัน";return}
+  const n=days(r).length;
+  $("hrs").textContent=n?`ใช้งาน ${n} วัน × ${hpd(r)} ชม./วัน = ${hoursIn(r)} ชั่วโมง`+(r.t2<r.t1?" (ข้ามเที่ยงคืน กรุณาตรวจสอบว่าถูกต้อง)":""):"ไม่มีวันที่ตรงเงื่อนไข กรุณาตรวจสอบวันในสัปดาห์และวันที่ยกเว้น";
+  const area=$("area").value.trim();
+  if(n&&area){const cf=conflictsFor({...r,area,building:$("building").value.trim(),floor:$("floor").value.trim()},editId);
+    if(cf.length)$("cflt").textContent=`⚠ ซ้อนเวลากับคำขออื่น ${cf.length} วัน เช่น ${thDate(cf[0].d)} ${cf[0].r.dept} ${cf[0].r.t1}–${cf[0].r.t2}`}}
+["useDate","useEnd","t1","t2","area","building","floor"].forEach(i=>$(i).addEventListener("input",hint));
+$("wd").addEventListener("change",hint);
+$("wdWork").onclick=()=>{setWd([1,2,3,4,5]);hint()};
+$("wdAll").onclick=()=>{setWd([0,1,2,3,4,5,6]);hint()};
+$("exAdd").onclick=()=>{
+  let a=$("exA").value,b=$("exB").value;if(!a)return;if(b&&b<a)[a,b]=[b,a];
+  const v=b&&b!==a?a+"~"+b:a;if(!exList.includes(v))exList.push(v);
+  $("exA").value=$("exB").value="";drawEx();hint()};
+$("exChips").addEventListener("click",e=>{const i=e.target.dataset.x;if(i!==undefined){exList.splice(+i,1);drawEx();hint()}});
+const notes=[];
+function drawNotice(){const n=$("notice");n.hidden=!notes.length;n.innerHTML=notes.map(t=>`<div class="nrow"><span>${t}</span></div>`).join("")+`<div class="nrow"><button class="sm" id="nbak">สำรองข้อมูลตอนนี้</button><button class="sm" id="nx">ปิด</button></div>`}
+function notice(t){notes.push(t);drawNotice()}
+$("notice").addEventListener("click",e=>{if(e.target.id==="nx"){notes.length=0;drawNotice()}if(e.target.id==="nbak")$("bak").click()});
+function checkBackup(){
+  let t=0;try{t=+localStorage.getItem(KEY+"_bak")||0}catch(e){}
+  const age=(Date.now()-t)/864e5;
+  if(data.length&&(!t||age>7))notice(t?`ยังไม่ได้สำรองข้อมูลมา ${Math.floor(age)} วันแล้ว`:"ยังไม่เคยสำรองข้อมูล แนะนำให้สำรองไว้เป็นประจำ เพราะข้อมูลเก็บอยู่ในเบราว์เซอร์เครื่องนี้เท่านั้น")}
+function validDate(v){try{return /^\d{4}-\d{2}-\d{2}$/.test(v)&&new Date(v+"T00:00:00Z").toISOString().slice(0,10)===v?v:""}catch(e){return""}}
+function clean(x){
+  if(!x||typeof x!=="object"||Array.isArray(x))return null;
+  const T=(v,n=200)=>typeof v==="string"?v.trim().slice(0,n):typeof v==="number"?String(v):"";
+  const tm=(v,d)=>/^([01]\d|2[0-3]):[0-5]\d$/.test(v)?v:d,useDate=validDate(x.useDate);
+  if(!useDate)return null;
+  const r={id:T(x.id,40)||uid(),dept:T(x.dept)||"(ไม่ระบุหน่วยงาน)",who:T(x.who),reqDate:validDate(x.reqDate),building:T(x.building,60),floor:T(x.floor,30),area:T(x.area)||"(ไม่ระบุ)",useDate,useEnd:validDate(x.useEnd),t1:tm(x.t1,"08:00"),t2:tm(x.t2,"17:00"),why:T(x.why,500),note:T(x.note,500)};
+  if(Array.isArray(x.wd)){const w=[...new Set(x.wd.map(Number).filter(n=>Number.isInteger(n)&&n>=0&&n<=6))];if(w.length&&w.length<7)r.wd=w}
+  if(Array.isArray(x.excl))r.excl=x.excl.filter(e=>typeof e==="string"&&e.split("~").length<=2&&e.split("~").every(validDate));
+  return r}
+function cleanAll(a){const seen=new Set(),out=[];let drop=0;
+  (Array.isArray(a)?a:[]).forEach(x=>{const r=clean(x);if(!r){drop++;return}while(seen.has(r.id))r.id=uid();seen.add(r.id);out.push(r)});
+  return{out,drop}}
+function load(){
+  let raw="[]";try{raw=localStorage.getItem(KEY)||"[]"}catch(e){}
+  let parsed=null;
+  try{parsed=JSON.parse(raw)}catch(e){
+    try{localStorage.setItem(KEY+"_corrupt",raw)}catch(_){}
+    notice("อ่านข้อมูลที่บันทึกไว้ไม่ได้ ระบบเก็บสำเนาข้อมูลเดิมไว้แล้วและเริ่มด้วยข้อมูลว่าง หากมีไฟล์สำรอง ให้กด “นำข้อมูลกลับ”")}
+  const{out,drop}=cleanAll(parsed);data=out;
+  if(drop){try{localStorage.setItem(KEY+"_dropped",raw)}catch(_){}notice(`ข้ามข้อมูลที่ไม่สมบูรณ์ ${drop} รายการ (เก็บสำเนาต้นฉบับไว้ในเบราว์เซอร์แล้ว)`)}}
+// ---- room clash detection
+const dmin=r=>{const[a,b]=[r.t1,r.t2].map(t=>{const[h,m]=(t||"0:0").split(":");return +h*60+ +m});let d=b-a;if(d<0)d+=1440;return d};
+function ivs(r,ds=days(r)){const[h,m]=(r.t1||"0:0").split(":"),a=+h*60+ +m,len=dmin(r);return ds.map(d=>{const s=Date.parse(d+"T00:00:00Z")/60000+a;return[s,s+len]})}
+function sameRoom(a,b){const n=x=>(x||"").trim().toLowerCase();return !!n(a.area)&&n(a.area)===n(b.area)&&(!n(a.building)||!n(b.building)||n(a.building)===n(b.building))&&(!n(a.floor)||!n(b.floor)||n(a.floor)===n(b.floor))}
+function conflictsFor(rec,ignoreId){
+  const ds=days(rec),A=ivs(rec,ds),out=[];
+  data.forEach(r=>{if(r.id===ignoreId||!sameRoom(rec,r))return;const B=ivs(r);A.forEach(([s,e],i)=>{if(B.some(([x,y])=>s<y&&x<e))out.push({d:ds[i],r})})});
+  return out}
+let CFL=new Set(),CFD=new Set();
+function conflictIds(){
+  const g={},ids=new Set(),ds=new Set();
+  data.forEach(r=>(g[(r.area||"").trim().toLowerCase()]??=[]).push(r));
+  Object.values(g).forEach(a=>{
+    if(a.length<2)return;const iv=a.map(r=>{const d=days(r);return{d,v:ivs(r,d)}});
+    for(let i=0;i<a.length;i++)for(let j=i+1;j<a.length;j++){
+      if(!sameRoom(a[i],a[j]))continue;
+      iv[i].v.forEach(([s,e],k)=>{if(iv[j].v.some(([x,y])=>s<y&&x<e)){ids.add(a[i].id);ds.add(a[i].id+"|"+iv[i].d[k])}});
+      iv[j].v.forEach(([s,e],k)=>{if(iv[i].v.some(([x,y])=>s<y&&x<e)){ids.add(a[j].id);ds.add(a[j].id+"|"+iv[j].d[k])}})}});
+  return{ids,ds}}
+const CTAG=' <span class="tag s-no">ซ้อนเวลา</span>';
+load();checkBackup();render();show("dash");
+</script>
+</body>
+</html>
